@@ -25,7 +25,7 @@ Training a Deep Q-Network to play Breakout from raw pixels, with a six-run study
 | E | As C, exploration fraction 0.08 | Learned faster, still unstable |
 | **F** | **Buffer 400k, γ = 0.95, batch 128, exploration 0.05** | **Most stable: steady upward trend, no catastrophic forgetting** |
 
-Hyperparameters for each run are in `notebooks/hyperparams_A.py` to `hyperparams_F.py`, gameplay videos are in [`videos/`](videos), and the training curves are in [`results/training_plots.xlsx`](results/training_plots.xlsx).
+Hyperparameters for each run are in [`dqn_breakout/config.py`](dqn_breakout/config.py) (originally `notebooks/hyperparams_A.py` to `hyperparams_F.py`), gameplay videos are in [`videos/`](videos), and the training curves are in [`results/training_plots.xlsx`](results/training_plots.xlsx).
 
 ## Takeaways
 
@@ -34,14 +34,33 @@ Hyperparameters for each run are in `notebooks/hyperparams_A.py` to `hyperparams
 - **Exploration is a balancing act.** Too much (run D) wastes millions of steps; too little (run E) speeds early learning but doesn't fix instability.
 - **Cost matters.** Run F needed several days on a laptop to reach about 4.5M steps and 5,000 episodes.
 
-## Running it
+## Running it (VS Code / Python)
 
 ```bash
-pip install "gym[atari,accept-rom-license]" stable-baselines3 torch numpy jupyter
-jupyter notebook notebooks/dqn_breakout_experiments.ipynb
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+
+python main.py train --run F                            # any of A-F; logs to runs/<run_name>/
+python main.py train --run A --total-timesteps 500000   # override any hyperparameter
+python main.py play runs/<run_name>/model.pt --episodes 5 --video outputs/eval_videos
+python main.py plot runs/<run_A> runs/<run_F>           # rolling-return curves -> outputs/returns.png
+python main.py theory                                   # grid-world value iteration
 ```
 
-The theory part of the lab (Q-learning by hand) is in [`notebooks/theory_tasks.ipynb`](notebooks/theory_tasks.ipynb) and [`docs/theory.pdf`](docs/theory.pdf).
+Each training run writes `returns.csv` (one row per game), checkpoints every 250k steps, a final `model.pt` (also on Ctrl+C), and gameplay videos. In VS Code, open the folder, select the `.venv` interpreter and use the **Run and Debug** panel (`.vscode/launch.json`). `pytest` runs smoke tests, including a 300-step training run.
+
+| Path | Contents |
+|---|---|
+| [`main.py`](main.py) | Command-line entry point |
+| [`dqn_breakout/config.py`](dqn_breakout/config.py) | Hyperparameters of runs A-F |
+| [`dqn_breakout/env.py`](dqn_breakout/env.py) | Atari preprocessing wrappers |
+| [`dqn_breakout/model.py`](dqn_breakout/model.py) | Q-network |
+| [`dqn_breakout/train.py`](dqn_breakout/train.py) | DQN loop: ε-greedy, replay buffer, target network |
+| [`dqn_breakout/evaluate.py`](dqn_breakout/evaluate.py) | Playing games with a trained agent, training curves |
+| [`dqn_breakout/theory.py`](dqn_breakout/theory.py) | Theory task: value iteration on a 3x4 grid |
+
+The original notebooks are kept in [`notebooks/`](notebooks); the theory part of the lab (Q-learning by hand) is in [`notebooks/theory_tasks.ipynb`](notebooks/theory_tasks.ipynb) and [`docs/theory.pdf`](docs/theory.pdf).
 
 ## Team
 
