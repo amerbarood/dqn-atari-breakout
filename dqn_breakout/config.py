@@ -1,6 +1,6 @@
 """Hyperparameters for the six experiment runs (A-F).
 
-Values are copied from notebooks/hyperparams_A.py ... hyperparams_F.py.
+Values are the ones used for the six training runs in the study.
 """
 
 from __future__ import annotations

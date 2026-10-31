@@ -25,7 +25,7 @@ Training a Deep Q-Network to play Breakout from raw pixels, with a six-run study
 | E | As C, exploration fraction 0.08 | Learned faster, still unstable |
 | **F** | **Buffer 400k, γ = 0.95, batch 128, exploration 0.05** | **Most stable: steady upward trend, no catastrophic forgetting** |
 
-Hyperparameters for each run are in [`dqn_breakout/config.py`](dqn_breakout/config.py) (originally `notebooks/hyperparams_A.py` to `hyperparams_F.py`), gameplay videos are in [`videos/`](videos), and the training curves are in [`results/training_plots.xlsx`](results/training_plots.xlsx).
+Hyperparameters for each run are in [`dqn_breakout/config.py`](dqn_breakout/config.py), gameplay videos are in [`videos/`](videos), and the training curves are in [`results/training_plots.xlsx`](results/training_plots.xlsx).
 
 ## Takeaways
 
@@ -60,7 +60,7 @@ Each training run writes `returns.csv` (one row per game), checkpoints every 250
 | [`dqn_breakout/evaluate.py`](dqn_breakout/evaluate.py) | Playing games with a trained agent, training curves |
 | [`dqn_breakout/theory.py`](dqn_breakout/theory.py) | Theory task: value iteration on a 3x4 grid |
 
-The original notebooks are kept in [`notebooks/`](notebooks); the theory part of the lab (Q-learning by hand) is in [`notebooks/theory_tasks.ipynb`](notebooks/theory_tasks.ipynb) and [`docs/theory.pdf`](docs/theory.pdf).
+The theory part of the lab (Q-learning by hand) is in [`dqn_breakout/theory.py`](dqn_breakout/theory.py) and [`docs/theory.pdf`](docs/theory.pdf).
 
 ## Team
 
